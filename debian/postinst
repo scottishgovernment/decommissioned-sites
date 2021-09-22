@@ -1,0 +1,45 @@
+#!/bin/sh
+# postinst script for decommissioned-sites
+#
+# see: dh_installdeb(1)
+
+set -e
+
+configure() {
+  # Set-up site user
+   adduser \
+      --quiet \
+      --system \
+      --home /opt/site \
+      --no-create-home \
+      --shell /bin/bash \
+      --group \
+      --gecos "Decommissioned Sites Creator" \
+      site
+   mkdir -p /var/log/site
+   chmod 755 /var/log/site
+   chown site:site /var/log/site
+
+   # File permissions
+   cd /opt/site
+   mkdir -p out
+   chown -R site:site out
+ }
+
+case "$1" in
+    configure)
+      configure
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0

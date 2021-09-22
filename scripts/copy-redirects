@@ -1,0 +1,60 @@
+#!/bin/bash -el
+# copy-redirects  - copies the redirects
+from="$1"
+shift
+targets="$@"
+
+# Duplicate stdout/stderr to log (redirection requires bash)
+exec > >(tee /var/log/site/copy_redirects.log)
+exec 2>&1
+
+rsync_copy() {
+  local target="$1"
+  rsync -aqz --delete-after "${from}" "${target}"
+}
+
+s3_copy() {
+  local target="$1"
+  aws s3 sync \
+    --delete \
+    --no-progress \
+    "${from}" \
+    "${target}"
+}
+
+copy_target() {
+  local target="$1"
+  case "${target}" in
+    s3:*)
+      s3_copy "${target}";;
+    *:*)
+      ssh_copy "${target}";;
+    *)
+      rsync_copy "${target}";;
+  esac
+}
+
+copy_targets() {
+  local targets="$1"
+  for target in ${targets}; do
+    status=0
+    printf "INFO: Copying redirects to ${target} ... "
+    set +e
+    copy_target "${target}"
+    result=$?
+    if [ ${result} != 0 ]; then
+      status=${result}
+      printf "failed.\n"
+    else
+      printf "done.\n"
+    fi
+    set -e
+  done
+}
+
+if [ -z "${targets}" ]; then
+  echo "No targets specified for copy."
+  exit 1
+fi
+
+copy_targets "${targets}"

@@ -1,0 +1,6 @@
+test:
+  files:
+    - src:
+        - src/*.hbs
+      dest: out/instrument/
+      expand: true

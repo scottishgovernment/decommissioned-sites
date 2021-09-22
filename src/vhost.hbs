@@ -1,0 +1,59 @@
+# Nginx virtual host configuration for {{name}}
+
+## http vhost for {{host}} ##
+server {
+
+  listen 80;
+  server_name {{host}};
+
+  set $args '';
+
+{{#pages}}
+  rewrite '{{{source}}}'
+          '{{{target}}}?via=$scheme://$host$uri' {{rewriteFlag}};
+{{/pages}}
+
+  # catch all redirect to the home page
+  location / {
+    rewrite ^ {{catchAllUri}}?via=$scheme://$host$uri break;
+    return 302;
+  }
+
+  location /robots.txt {
+    return 200;
+  }
+
+  location /favicon.ico {
+    return 404;
+  }
+
+}
+
+## https vhost for {{host}} ##
+server {
+
+  listen 443;
+  server_name {{host}};
+
+  set $args '';
+
+{{#pages}}
+  rewrite '{{{source}}}'
+          '{{{target}}}?via=$scheme://$host$uri' {{rewriteFlag}};
+{{/pages}}
+
+  # catch all redirect to the home page
+  location / {
+    rewrite ^ {{{catchAllUri}}}?via=$scheme://$host$uri break;
+    return 302;
+  }
+
+  location /robots.txt {
+    return 200;
+  }
+
+  location /favicon.ico {
+    return 404;
+  }
+
+}

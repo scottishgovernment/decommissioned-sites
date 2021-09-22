@@ -1,0 +1,16 @@
+*.iml
+*.deb
+.sonar
+debian/changelog
+debian/.debhelper
+debian/debhelper-build-stamp
+debian/files
+debian/decommissioned-sites
+debian/decommissioned-sites.debhelper.log
+debian/decommissioned-sites.substvars
+node_modules
+npm-debug.log
+out
+.idea
+**/.DS_Store
+

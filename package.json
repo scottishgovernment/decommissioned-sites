@@ -1,0 +1,46 @@
+{
+  "name": "decommissioned-sites",
+  "description": "mygov.scot web site",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.digital.gov.uk:7999/mgv/decommissioned-sites.git"
+  },
+  "author": {
+    "name": "mygov.scot team",
+    "email": "dleepdigmsgb@gov.scot",
+    "url": "http://inside.mygovscot.org/"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "postshrinkwrap": "sealant"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "config-weaver": "0.0.15",
+    "fs-extra": "^10.0.0",
+    "grunt": "^1.0.4",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "handlebars": "^4.7.3",
+    "load-grunt-config": "^4.0.1",
+    "load-grunt-tasks": "^5.1.0",
+    "restler": "^3.4.0",
+    "time-grunt": "^1.4.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-istanbul": "^0.8.0",
+    "grunt-jasmine-node": "^0.3.1",
+    "grunt-jasmine-node-coverage": "^2.0.1",
+    "grunt-karma": "^4.0.2",
+    "grunt-sonar-runner": "^2.4.8",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "jasmine-core": "^2.99.1",
+    "jasmine-expect": "^2.0.2",
+    "sealant": "^0.1.1",
+    "temp": "^0.9.4"
+  }
+}

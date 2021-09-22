@@ -1,0 +1,5 @@
+src: out/coverage/*.json
+options:
+    type: lcov
+    dir: out/coverage
+    print: detail
