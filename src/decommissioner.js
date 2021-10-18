@@ -14,7 +14,7 @@ module.exports = function (config) {
 
     function fetchSites(done) {
         console.log('fetchSites');
-        restler.get(config.url + 'redirects/sites').on('complete',
+        restler.get(config.url + 'redirects/sites?size=50').on('complete',
             function (data, response) {
                 if (response.statusCode === 200) {
                     sites = JSON.parse(data);
