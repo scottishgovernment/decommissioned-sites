@@ -66,7 +66,7 @@ module.exports = function (config) {
     function targetUrl(target, base) {
         const targetUrl = new URL(target, base);
         const useVia = ![
-            'webarchive.nrscotland.gov.uk',
+            'webarchive.nrscotland.gov.uk'
         ].includes(targetUrl.host);
         if (useVia) {
             targetUrl.search = targetUrl.search
