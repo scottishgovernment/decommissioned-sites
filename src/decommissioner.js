@@ -64,11 +64,16 @@ module.exports = function (config) {
     // if the target url is a fully qualified url then just use it as the target url.
     // Otherwise add the base usrl to the front.
     function targetUrl(target, base) {
-        if (target.indexOf('http') === 0) {
-            return target;
-        } else {
-            return base+target;
+        const targetUrl = new URL(target, base);
+        const useVia = ![
+            'webarchive.nrscotland.gov.uk',
+        ].includes(targetUrl.host);
+        if (useVia) {
+            targetUrl.search = targetUrl.search
+                + (targetUrl.search && '&' || '?')
+                + 'via=$scheme://$host$uri';
         }
+        return targetUrl.toString();
     }
 
     //The redirect type is the flag used on the rewrite directive
