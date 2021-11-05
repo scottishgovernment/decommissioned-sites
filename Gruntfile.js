@@ -30,8 +30,6 @@ module.exports = function(grunt) {
         loadGruntTasks: false
     });
 
-    require('jit-grunt')(grunt, {
-      instrument: 'grunt-istanbul'
-    });
+    require('jit-grunt')(grunt, {});
 
 };

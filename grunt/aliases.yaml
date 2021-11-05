@@ -1,17 +1,12 @@
 publish-redirects:
   description: 'Publish redirects'
   tasks:
-    - clean:redirects
-    - create-redirects
-    - copy-redirects
+    - shell:publish-redirects
 test:
   description: 'Run tests'
   tasks:
-    - copy:test
-    - instrument
-    - jasmine_node
-    - storeCoverage
-    - makeReport
+    - clean:out
+    - shell:nyc
 sonar:
   description: 'Run SonarQube in preview mode'
   tasks:

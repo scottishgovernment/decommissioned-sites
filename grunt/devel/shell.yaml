@@ -1,0 +1,9 @@
+options:
+  stdout: true
+nyc:
+  command: nyc jasmine-node --junitreport --output out/reports test
+  execOptions:
+    env:
+      PATH=node_modules/.bin
+publish-redirects:
+  command: bin/redirects

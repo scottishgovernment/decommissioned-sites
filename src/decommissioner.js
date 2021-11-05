@@ -1,60 +1,54 @@
-module.exports = function (config) {
+const fs = require('fs');
+const got = require('got');
+const handlebars = require('handlebars');
+const path = require('path');
+const util = require('util');
 
-    var restler = require('restler'),
-        path = require('path'),
-        handlebars = require('handlebars'),
-        async = require('async'),
-        fs = require('fs-extra'),
-        url = require('url');
+class Decommissioner {
 
-    var pagesTemplateSrc = fs.readFileSync(__dirname + '/vhost.hbs', 'UTF-8');
-    var pagesTemplate = handlebars.compile(pagesTemplateSrc);
+    constructor(config) {
+        const pagesTemplateSrc = fs.readFileSync(__dirname + '/vhost.hbs', 'UTF-8');
+        this.config = config;
+        this.pagesTemplate = handlebars.compile(pagesTemplateSrc);
+        this.outputDir = path.join(this.config.tempdir, 'nginx', 'decommissioned');
+    }
 
-    var sites;
+    async createRedirects() {
+        const mkdir = util.promisify(fs.mkdir);
+        await mkdir(this.outputDir, { recursive: true });
+        const sites = await this.fetchSites();
+        return await this.fetchPagesForSites(sites);
+    }
 
-    function fetchSites(done) {
+    fetchSites() {
         console.log('fetchSites');
-        restler.get(config.url + 'redirects/sites?size=50').on('complete',
-            function (data, response) {
-                if (response.statusCode === 200) {
-                    sites = JSON.parse(data);
-                    done();
-                } else {
-                    console.log('fetchSites ' + data);
-                    done('Error fetching sites: ' + JSON.stringify(data, null, 2));
-                }
-            });
+        const url = `${this.config.url}redirects/sites?size=50`;
+        return got(url).json();
     }
 
-    function fetchPagesForSites(done) {
+    async fetchPagesForSites(sitesHAL) {
         console.log('fetchPagesForSites');
-
-        if (sites._embedded && sites._embedded.sites) {
-            async.forEach(sites._embedded.sites, fetchPageForSite,
-                function (err) {
-                    if (err) {
-                        done('Error fetching pages: ' + JSON.stringify(err));
-                    } else {
-                        done();
-                    }
-                }
-            );
-
-        } else {
-            done();
+        if (sitesHAL._embedded && sitesHAL._embedded.sites) {
+            const sites = sitesHAL._embedded.sites;
+            for (const site of sites) {
+                await this.processSite(site)
+                .catch(error => {
+                    console.log('Error fetching pages: ' + JSON.stringify(error));
+                    return Promise.reject(error);
+                })
+            }
         }
-
     }
 
-    function escapeRegExpChars(str) {
+    escapeRegExpChars(str) {
         return str.replace(/['-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 
-    function sourceUrl(page) {
+    sourceUrl(page) {
         var srcUrl = page.srcUrl;
 
         if (page.type === 'EXACT') {
-            srcUrl = escapeRegExpChars(decodeURI(srcUrl));
+            srcUrl = this.escapeRegExpChars(decodeURI(srcUrl));
         }
 
         var endsWithSlash = srcUrl.charAt(srcUrl.length - 1) === '/';
@@ -62,13 +56,13 @@ module.exports = function (config) {
     }
 
     // if the target url is a fully qualified url then just use it as the target url.
-    // Otherwise add the base usrl to the front.
-    function targetUrl(target, base) {
+    // Otherwise add the base URL to the front.
+    targetUrl(target, base) {
         const targetUrl = new URL(target, base);
-        const useVia = ![
+        const addVia = ![
             'webarchive.nrscotland.gov.uk'
         ].includes(targetUrl.host);
-        if (useVia) {
+        if (addVia) {
             targetUrl.search = targetUrl.search
                 + (targetUrl.search && '&' || '?')
                 + 'via=$scheme://$host$uri';
@@ -76,10 +70,10 @@ module.exports = function (config) {
         return targetUrl.toString();
     }
 
-    //The redirect type is the flag used on the rewrite directive
-    //It can only have the values redirect or permanent, lower-case, and default
-    //to permanent
-    function sanitiseRedirectType(page) {
+    // The redirect type is the flag used on the rewrite directive
+    // It can only have the values redirect or permanent, lower-case, and default
+    // to permanent.
+    sanitiseRedirectType(page) {
         var type = page.redirectType;
         if (type && type.toLowerCase() === 'redirect') {
             return 'redirect';
@@ -87,70 +81,71 @@ module.exports = function (config) {
         return 'permanent';
     }
 
-    function fetchPageForSite(site, callback) {
-        restler.get(site._links.pages.href).on('complete',
-            function (data, response) {
-                if (response.statusCode !== 200) {
-                    callback('Error fetching pages: '+JSON.stringify(data, null, '\t'));
-                }
-
-                var pagesJSON = JSON.parse(data);
-                if (pagesJSON._embedded === undefined) {
-                    callback();
-                    return;
-                }
-
-                // Ensure site URL has no trailing slash:
-                var siteUrl = url.parse(config.siteUrl).href.slice(0,-1);
-
-                // sort the pages so that exact mathces come first followed by
-                // regexps
-                pagesJSON._embedded.pages =
-                    pagesJSON._embedded.pages.sort(function (a, b) {
-
-                        if (a.type === b.type) {
-                            return a.srcUrl.localeCompare(b.srcUrl);
-                        }
-
-                        if (a.type === 'EXACT') {
-                            return -1;
-                        }
-
-                        return 1;
-                    });
-
-                var pages = [];
-                for (var i = 0; i < pagesJSON._embedded.pages.length; i++) {
-                    var page = pagesJSON._embedded.pages[i];
-                    pages.push({
-                        source: sourceUrl(page),
-                        target: targetUrl(page.targetUrl, siteUrl),
-                        rewriteFlag: sanitiseRedirectType(page)
-                    });
-                }
-
-                var srcDoc = {
-                    name: site.name,
-                    host: site.host,
-                    catchAllUri: targetUrl(site.catchAllUri || '', siteUrl),
-                    pages: pages
-                };
-
-                var content = pagesTemplate(srcDoc);
-
-                var decommissionDir = path.join(config.tempdir, 'nginx', 'decommissioned');
-                fs.mkdirsSync(decommissionDir);
-
-                var firstHost = site.host.split(' ')[0];
-                var filename = path.join(decommissionDir, firstHost + '.conf');
-                fs.writeFile(filename, content, 'UTF-8', callback);
-            }
-        );
+    async processSite(site) {
+        console.log(`processSite ${site.name}`);
+        const pages = await this.fetchPagesForSite(site);
+        await this.writeRedirects(site, pages);
     }
 
-    return {
-        createRedirects: function(callback) {
-            async.series([fetchSites, fetchPagesForSites], callback);
+    fetchPagesForSite(site) {
+        const url = site._links.pages.href;
+        console.log(`fetchPagesForSite ${url}`);
+        return got(url).json();
+    }
+
+    sortComparison(a, b) {
+        if (a.type === b.type) {
+            return a.srcUrl.localeCompare(b.srcUrl);
         }
-    };
-};
+        if (a.type === 'EXACT') {
+            return -1;
+        }
+        return 1;
+    }
+
+    writeRedirects(site, pagesJSON) {
+        var siteUrl = this.config.siteUrl;
+
+        // sort the pages so that exact matches come first followed by regexps
+        const sortedPages = pagesJSON._embedded.pages.sort(this.sortComparison);
+
+        var pages = sortedPages.map(page => {
+            return {
+                source: this.sourceUrl(page),
+                target: this.targetUrl(page.targetUrl, siteUrl),
+                rewriteFlag: this.sanitiseRedirectType(page)
+            };
+        });
+
+        var srcDoc = {
+            name: site.name,
+            host: site.host,
+            catchAllUri: this.targetUrl(site.catchAllUri || '', siteUrl),
+            pages: pages
+        };
+
+        var content = this.pagesTemplate(srcDoc);
+
+        const filename = site.host.split(' ')[0] + '.conf';
+        const pathname = path.join(this.outputDir, filename);
+        const writeFile = util.promisify(fs.writeFile);
+        return writeFile(pathname, content, 'UTF-8');
+    }
+
+    static run() {
+        const configWeaver = require('config-weaver');
+        var config = configWeaver.config();
+        configWeaver.showVars(config, 'redirects');
+        var decommissioner = new Decommissioner(config);
+        decommissioner.createRedirects()
+        .catch(err => {
+            console.log(err);
+            process.exit(1);
+        });
+    }
+}
+
+module.exports = Decommissioner;
+if (require.main === module) {
+    Decommissioner.run();
+}

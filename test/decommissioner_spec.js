@@ -1,31 +1,36 @@
-var sutPath = '../out/instrument/src/decommissioner';
+const fs = require('fs');
+const util = require('util');
+const Decommissioner = require('../src/decommissioner');
 
 describe('decommissioner', function() {
 
     var testRest = require('./test-decommissioned-sites-server')();
     var authPort = 1110
     var testAuthPort = 1111;
-    var tempDir = __dirname + '/../out/decommission';
+    var tempDir = __dirname + '/../out';
 
     beforeEach(function(done) {
-
-        var temp = require('temp');
-        temp.mkdir('',
-            function(err, dirPath) {
-                tempDir = dirPath;
-                done();
-            }
-        );
+        const mkdir = util.promisify(fs.mkdir);
+        mkdir(tempDir, { recursive: true })
+        .then(done);
     });
 
     function test(config, port, sites, pages, done) {
+        const server = testRest.startGreenpathServer(port, sites, pages);
 
-        testRest.startGreenpathServer(port, sites, pages);
-
-        var sut = require(sutPath)(config);
-        sut.createRedirects(function (err) {
-            var redirectFile = require('fs').readFileSync(tempDir + '/nginx/decommissioned/alpha.mygov.scot.conf');
-            done();
+        var decommissioner = new Decommissioner(config);
+        var error = undefined;
+        decommissioner.createRedirects()
+        .then(_ => {
+            var redirectFile = fs.readFileSync(tempDir + '/nginx/decommissioned/alpha.mygov.scot.conf');
+        })
+        .catch(err => {
+          error = err;
+        })
+        .finally(() => {
+            server.close(function(e) {
+                done(error || e);
+            });
         });
     }
 

@@ -4,5 +4,6 @@
   },
   "redirects": [
     "<%= site.tempdir %>/nginx"
-  ]
+  ],
+  "out": "out/"
 }
