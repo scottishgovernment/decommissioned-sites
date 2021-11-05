@@ -5,4 +5,5 @@ node_modules /opt/site
 package.json /opt/site
 scripts      /opt/site
 src          /opt/site
+bin          /opt/site
 tasks        /opt/site
