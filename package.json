@@ -20,6 +20,7 @@
     "config-weaver": "0.0.15",
     "got": "^11.8.2",
     "handlebars": "^4.7.3",
+    "msgpack5": "^5.3.2",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
