@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "config-weaver": "0.0.15",
+    "dateformat": "^3.0.3",
     "got": "^11.8.2",
     "handlebars": "^4.7.3",
     "msgpack5": "^5.3.2",
