@@ -13,7 +13,7 @@
   },
   "scripts": {
     "postshrinkwrap": "sealant",
-    "publish-redirects": "bin/redirects",
+    "publish-redirects": "node src/publisher.js",
     "test": "grunt test"
   },
   "dependencies": {

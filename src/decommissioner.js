@@ -35,7 +35,7 @@ class Decommissioner {
                 .catch(error => {
                     console.log('Error fetching pages: ' + JSON.stringify(error));
                     return Promise.reject(error);
-                })
+                });
             }
         }
     }

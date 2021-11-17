@@ -69,7 +69,6 @@ var decode = msgpack.decode;
         this.log('connection established');
         this.handshake();
         if (this.callback) {
-            console.log('callback');
             this.callback();
         }
     }

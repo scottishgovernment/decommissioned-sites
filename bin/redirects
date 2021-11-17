@@ -1,31 +1,20 @@
 #!/usr/bin/env node
 process.title = 'redirects';
 const configWeaver = require('config-weaver');
-const rimraf = require('rimraf');
-const path = require('path');
-const util = require('util');
-const Decommissioner = require('../src/decommissioner');
-const Publisher = require('../src/publisher');
-const Serf = require('../src/serf');
-
 const config = configWeaver.config();
 configWeaver.showVars(config, 'redirects');
 
-const decommissioner = new Decommissioner(config);
+const Publisher = require('../src/publisher');
 const publisher = new Publisher(config);
-const serf = new Serf();
 
-const rm = util.promisify(rimraf);
-rm(path.join(config.tempdir, 'nginx'))
-.then(decommissioner.createRedirects.bind(decommissioner))
-.then(publisher.publish.bind(publisher))
-.then(() => {
-    return new Promise((resolve, reject) => {
-        serf.start(resolve);
-    })
-})
-.then(serf.publish.bind(serf))
-.then(serf.stop.bind(serf))
+async function run() {
+    await publisher.start();
+    await server.start();
+}
+
+const Server = require('../src/server');
+const server = new Server(publisher);
+run()
 .catch(err => {
     console.log(err);
     process.exit(1);

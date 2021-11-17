@@ -31,7 +31,12 @@ module.exports = function (grunt, options) {
                     lcov: {
                         reportPath: 'out/coverage/lcov.info'
                     }
-                }
+                },
+                exclusions: [
+                    'src/server.js',
+                    'src/copy.js',
+                    'src/publisher.js',
+                ]
             }
         };
         if (token) {

@@ -68,6 +68,11 @@ describe('decommissioner', function() {
                     "_embedded" : {
                         "pages" : [
                             {
+                                "srcUrl": "/source/exact/",
+                                "targetUrl": "/target/exact/",
+                                "type": "EXACT"
+                            },
+                            {
                                 "srcUrl": "/srcUrl/",
                                 "targetUrl": "/target/url/",
                                 "redirectType": "REDIRECT"
