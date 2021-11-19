@@ -10,20 +10,35 @@ configure() {
    adduser \
       --quiet \
       --system \
-      --home /opt/site \
+      --home /opt/redirects \
       --no-create-home \
       --shell /bin/bash \
       --group \
-      --gecos "Decommissioned Sites Creator" \
-      site
-   mkdir -p /var/log/site
-   chmod 755 /var/log/site
-   chown site:site /var/log/site
+      --gecos "Redirects" \
+      redirects
+
+  if ! id -g site >/dev/null 2>&1 ; then
+    groupadd \
+      --force \
+      --non-unique \
+      --gid "$(id -g redirects)"
+  fi
+
+  if ! id -u site >/dev/null 2>&1 ; then
+    useradd \
+      --non-unique \
+      --uid "$(id -u redirects)" \
+      --gid "$(id -g redirects)" \
+      --no-create-home \
+      --home-dir /opt/redirects \
+      --shell /bin/bash \
+      --comment "Site"
+  fi
 
    # File permissions
-   cd /opt/site
+   cd /opt/redirects
    mkdir -p out
-   chown -R site:site out
+   chown -R redirects:redirects out
  }
 
 case "$1" in

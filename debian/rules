@@ -3,7 +3,7 @@
 
 #export DH_VERBOSE=1
 NPM=/usr/bin/npm
-MODULES=opt/site/node_modules
+MODULES=opt/redirects/node_modules
 
 override_dh_auto_build:
 	test -d node_modules || npm install
@@ -29,6 +29,7 @@ override_dh_install:
 	  --delete-excluded \
 	  --exclude-from=out/deps-test.txt \
 	  node_modules/ debian/decommissioned-sites/$(MODULES)
+	ln -s redirects debian/decommissioned-sites/opt/site
 
 override_dh_fixperms:
 	find debian/decommissioned-sites -print0 2>/dev/null | xargs -0r chown --no-dereference 0:0

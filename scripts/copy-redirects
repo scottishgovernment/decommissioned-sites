@@ -4,10 +4,6 @@ from="$1"
 shift
 targets="$@"
 
-# Duplicate stdout/stderr to log (redirection requires bash)
-exec > >(tee /var/log/site/copy_redirects.log)
-exec 2>&1
-
 rsync_copy() {
   local target="$1"
   rsync -aqz --delete-after "${from}" "${target}"
