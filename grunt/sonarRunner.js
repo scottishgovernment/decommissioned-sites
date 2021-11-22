@@ -33,8 +33,9 @@ module.exports = function (grunt, options) {
                     }
                 },
                 exclusions: [
-                    'src/server.js',
                     'src/copy.js',
+                    'src/log.js',
+                    'src/server.js',
                     'src/publisher.js',
                 ]
             }

@@ -7,6 +7,7 @@ debian/debhelper-build-stamp
 debian/files
 debian/decommissioned-sites
 debian/decommissioned-sites.debhelper.log
+debian/decommissioned-sites.postrm.debhelper
 debian/decommissioned-sites.substvars
 node_modules
 npm-debug.log

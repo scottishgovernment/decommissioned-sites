@@ -6,14 +6,16 @@ configWeaver.showVars(config, 'redirects');
 
 const Publisher = require('../src/publisher');
 const publisher = new Publisher(config);
+const Log = require('../src/log');
 
 async function run() {
     await publisher.start();
     await server.start();
 }
 
+const log = new Log();
 const Server = require('../src/server');
-const server = new Server(publisher);
+const server = new Server(publisher, log);
 run()
 .catch(err => {
     console.log(err);

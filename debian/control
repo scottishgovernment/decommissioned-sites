@@ -2,7 +2,7 @@ Source: decommissioned-sites
 Section: mygov
 Priority: optional
 Maintainer: Martin Ellis <martin.ellis@gov.scot>
-Build-Depends: debhelper (>= 8.0.0), rsync
+Build-Depends: debhelper-compat (= 12), rsync
 Standards-Version: 3.9.4
 
 Package: decommissioned-sites

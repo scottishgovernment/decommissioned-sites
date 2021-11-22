@@ -6,8 +6,9 @@ const process = require('process');
  */
 class Server {
 
-    constructor(publisher) {
+    constructor(publisher, log) {
         this.publisher = publisher;
+        this.log = log;
         this.server = http.createServer(this.handle.bind(this));
         this.ready = true;
     }
@@ -25,11 +26,21 @@ class Server {
     }
 
     handle(req, res) {
-        if (req.method === 'POST' && req.url === '/publish') {
+        if (req.method === 'GET' && req.url === '/log') {
+            this.getLog(req, res);
+        } else if (req.method === 'POST' && req.url === '/publish') {
             this.publish(req, res);
         } else {
             this.badRequest(req, res);
         }
+    }
+
+    async getLog(req, res) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        const log = await this.log.get();
+        res.end(JSON.stringify({
+            pubs: log
+        }, null, 2));
     }
 
     async publish(req, res) {

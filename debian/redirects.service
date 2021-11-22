@@ -1,0 +1,12 @@
+[Unit]
+Description=Redirects service
+After=network.target
+
+[Service]
+User=redirects
+WorkingDirectory=/opt/redirects
+ExecStart=/opt/redirects/bin/redirects
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

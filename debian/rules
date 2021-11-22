@@ -31,6 +31,9 @@ override_dh_install:
 	  node_modules/ debian/decommissioned-sites/$(MODULES)
 	ln -s redirects debian/decommissioned-sites/opt/site
 
+override_dh_installsystemd:
+	dh_installsystemd --name=redirects
+
 override_dh_fixperms:
 	find debian/decommissioned-sites -print0 2>/dev/null | xargs -0r chown --no-dereference 0:0
 	find debian/decommissioned-sites ! -type l  -print0 2>/dev/null | xargs -0r chmod go=rX,u+rw,a-s
