@@ -1,0 +1,34 @@
+#!/bin/bash
+. /etc/profile
+set -eu
+dir="$(dirname $0)"
+if [ "$dir" != . ]; then
+  cd "$dir"
+fi
+PATH=node_modules/.bin:$PATH
+remote=http://localhost:5984/publish
+couchdb_user=${redirects_couchdb_user-${couchdb_user-}}
+couchdb_password=${redirects_couchdb_password-${couchdb_password-}}
+if [ -n "$couchdb_user" ] && [ -n "$couchdb_password" ]; then
+  proto=${remote%%://*}
+  rest=${remote#*//}
+  remote="${proto}://${couchdb_user}:${couchdb_password}@${rest}"
+fi
+echo "Checking database exists."
+if ! curl -o /dev/null -sfI "$remote"; then
+  curl -X PUT "$remote"
+fi
+# headers=$(curl -sSI localhost:5984/publish/_design/publish)
+# rev=$(echo "$headers" | awk -F": " '$1=="ETag" { gsub("[\"\r]",""); print $2 }')
+# echo "Updating design document."
+# curl \
+#   -X PUT \
+#   -H 'Content-Type: application/json' \
+#   -d @design.json \
+#   "$remote/_design/publish${rev:+?rev=$rev}"
+echo "Updating security document."
+curl \
+  -X PUT \
+  -H 'Content-Type: application/json' \
+  -d '{}' \
+  $remote/_security

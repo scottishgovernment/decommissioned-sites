@@ -1,6 +1,7 @@
 config.yaml  /opt/redirects
 node_modules /opt/redirects
 package.json /opt/redirects
+bin          /opt/redirects
+push         /opt/redirects
 scripts      /opt/redirects
 src          /opt/redirects
-bin          /opt/redirects

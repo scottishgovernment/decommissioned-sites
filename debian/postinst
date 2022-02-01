@@ -41,6 +41,7 @@ configure() {
    cd /opt/redirects
    mkdir -p out
    chown -R redirects:redirects out
+   /opt/redirects/push
  }
 
 case "$1" in
