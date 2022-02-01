@@ -18,7 +18,7 @@ class Server {
     }
 
     start() {
-        this.server.listen(8000);
+        this.server.listen(8098);
     }
 
     shutdown() {
@@ -26,9 +26,12 @@ class Server {
     }
 
     handle(req, res) {
-        if (req.method === 'GET' && req.url === '/log') {
+        const port = this.port();
+        const url = new URL(req.url, `http://localhost:${port}`);
+        console.log(`${req.method} ${url.pathname}`);
+        if (req.method === 'GET' && url.pathname === '/log') {
             this.getLog(req, res);
-        } else if (req.method === 'POST' && req.url === '/publish') {
+        } else if (req.method === 'POST' && url.pathname === '/publish') {
             this.publish(req, res);
         } else {
             this.badRequest(req, res);
@@ -36,7 +39,7 @@ class Server {
     }
 
     async getLog(req, res) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
         const log = await this.log.get();
         res.end(JSON.stringify({
             pubs: log
@@ -44,10 +47,12 @@ class Server {
     }
 
     async publish(req, res) {
+        const user = req.headers['x-user'] || '';
+        console.log(`Publish started by ${user}`);
         if (this.ready) {
             this.ready = false;
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            const publish = this.publisher.publish();
+            const publish = this.publisher.publish(user);
             res.end(JSON.stringify({
                 ok: 'Publish started'
             }, null, 2));

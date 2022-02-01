@@ -4,12 +4,14 @@ const util = require('util');
 const Copy = require('./copy');
 const Decommissioner = require('./decommissioner');
 const Serf = require('./serf');
+const Log = require('./log');
 
 class Publisher {
 
     constructor(config) {
         this.config = config;
         this.decommissioner = new Decommissioner(config);
+        this.log = new Log(config.database);
         this.copy = new Copy(config);
         this.serf = new Serf();
     }
@@ -26,12 +28,15 @@ class Publisher {
         });
     }
 
-    async publish() {
+    async publish(user) {
         const rm = util.promisify(rimraf);
+        const start = new Date();
         await rm(path.join(this.config.tempdir, 'nginx'));
         await this.decommissioner.createRedirects();
         await this.copy.publish();
-        return this.serf.publish();
+        await this.serf.publish();
+        const end = new Date();
+        await this.log.record(user, start, end);
     }
 
     static async run() {
@@ -40,7 +45,7 @@ class Publisher {
         configWeaver.showVars(config, 'redirects');
         var publisher = new Publisher(config);
         await publisher.start();
-        await publisher.publish();
+        await publisher.publish('admin@mygov.scot');
         return publisher.stop()
         .catch(err => {
             console.log(err);
