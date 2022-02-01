@@ -3,3 +3,4 @@ application:
 url: http://localhost:8089/
 siteUrl: https://www.mygov.scot/
 tempdir: out
+target: ''
