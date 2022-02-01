@@ -26,7 +26,15 @@ class Log {
         });
         const docs = list.rows
             .filter(d => !d.id.startsWith('_'))
-            .map(r => r.doc);
+            .map(r => r.doc)
+            .map(r => {
+                const buildTime = new Date(r.end) - new Date(r.start);
+                return {
+                    createdby: r.user,
+                    created: r.start,
+                    buildTime: buildTime,
+                };
+            });
         docs.forEach(d => {
             delete d._id;
             delete d._rev;
@@ -37,10 +45,3 @@ class Log {
 }
 
 module.exports = Log;
-if (require.main === module) {
-    const log = new Log();
-    log.record('martin.ellis@gov.scot', new Date(), new Date())
-    .then(() => { return log.get(); })
-    .then(o => JSON.stringify(o, null, 2))
-    .then(console.log);
-}
