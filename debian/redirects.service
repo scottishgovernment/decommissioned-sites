@@ -5,7 +5,8 @@ After=network.target
 [Service]
 User=redirects
 WorkingDirectory=/opt/redirects
-ExecStart=/bin/sh -lc /opt/redirects/bin/redirects
+ExecStart=/bin/sh -lc 'exec /opt/redirects/bin/redirects'
+SyslogIdentifier=redirects
 Restart=on-failure
 
 [Install]
