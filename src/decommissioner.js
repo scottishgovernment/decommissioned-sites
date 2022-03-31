@@ -65,7 +65,7 @@ class Decommissioner {
         if (addVia) {
             targetUrl.search = targetUrl.search
                 + (targetUrl.search && '&' || '?')
-                + 'via=$scheme://$host$uri';
+                + 'via=$scheme://$host$request_uri';
         }
         return targetUrl.toString();
     }
