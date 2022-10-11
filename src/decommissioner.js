@@ -59,8 +59,10 @@ class Decommissioner {
     // Otherwise add the base URL to the front.
     targetUrl(target, base) {
         const targetUrl = new URL(target, base);
-        const addVia = ![
-            'webarchive.nrscotland.gov.uk'
+        const addVia = [
+            'www.gov.scot',
+            'www.mygov.scot',
+            'blogs.gov.scot'
         ].includes(targetUrl.host);
         if (addVia) {
             targetUrl.search = targetUrl.search
