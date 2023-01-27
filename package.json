@@ -12,7 +12,6 @@
     "url": "http://inside.mygovscot.org/"
   },
   "scripts": {
-    "postshrinkwrap": "sealant",
     "publish-redirects": "node src/publisher.js",
     "test": "grunt test"
   },
@@ -39,7 +38,6 @@
     "load-grunt-config": "^4.0.1",
     "load-grunt-tasks": "^5.1.0",
     "nyc": "^15.1.0",
-    "sealant": "^0.1.1",
     "temp": "^0.9.4",
     "time-grunt": "^2.0.0"
   }
