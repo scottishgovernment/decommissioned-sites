@@ -14,11 +14,11 @@ override_dh_auto_test:
 
 override_dh_install:
 	dh_install
-	$(NPM) ls --parseable | \
+	$(NPM) ls --parseable --all | \
 	  sed "s@$$PWD/node_modules/@@" | \
 	  sort \
 	  > out/deps-all.txt
-	$(NPM) ls --parseable --production | \
+	$(NPM) ls --parseable --production --all | \
 	sed "s@$$PWD/node_modules/@@" | \
 	  sort \
 	  > out/deps-prod.txt
