@@ -13,5 +13,6 @@ node_modules
 npm-debug.log
 out
 .idea
+.scannerwork
 **/.DS_Store
 

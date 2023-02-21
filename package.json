@@ -31,7 +31,7 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-jasmine-node": "^0.3.1",
     "grunt-shell": "^3.0.1",
-    "grunt-sonar-runner": "^2.4.8",
+    "grunt-sonar-runner": "^3.0.2",
     "jasmine-core": "^3.10.1",
     "jasmine-expect": "^5.0.0",
     "js-yaml": "^4.1.0",
