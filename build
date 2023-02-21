@@ -27,7 +27,7 @@ else
 fi
 
 rm -f debian/changelog
-dch --create --package decommissioned-sites -v $VERSION ""
+dch --create --controlmaint --package decommissioned-sites -v $VERSION ""
 ./debian/rules clean
 ./debian/rules build
 fakeroot ./debian/rules binary OUTDIR=.
