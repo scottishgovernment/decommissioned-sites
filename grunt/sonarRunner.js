@@ -29,7 +29,7 @@ module.exports = function (grunt, options) {
                 sourceEncoding: 'UTF-8',
                 javascript: {
                     lcov: {
-                        reportPath: 'out/coverage/lcov.info'
+                        reportPaths: 'out/coverage/lcov.info'
                     }
                 },
                 exclusions: [
