@@ -1,5 +1,8 @@
 const nano = require('nano');
 
+/**
+ * Stores publish events in CouchDB.
+ */
 class Log {
 
     constructor(url) {
