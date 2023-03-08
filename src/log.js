@@ -32,7 +32,7 @@ class Log {
                 return {
                     createdby: r.user,
                     created: r.start,
-                    buildTime: buildTime,
+                    buildTime: buildTime
                 };
             });
         docs.forEach(d => {
