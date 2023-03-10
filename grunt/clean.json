@@ -1,9 +1,0 @@
-{
-  "options": {
-    "force": true
-  },
-  "redirects": [
-    "<%= site.tempdir %>/nginx"
-  ],
-  "out": "out/"
-}

@@ -12,8 +12,10 @@
     "url": "http://inside.mygovscot.org/"
   },
   "scripts": {
+    "clean": "rm -r out debian/changelog debian/decommissioned-sites/",
+    "publish": "bin/redirects",
     "publish-redirects": "node src/publisher.js",
-    "test": "grunt test"
+    "test": "nyc jasmine-node --junitreport --output out/reports test"
   },
   "dependencies": {
     "config-weaver": "0.0.15",
@@ -27,15 +29,8 @@
   "devDependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "grunt": "^1.4.1",
-    "grunt-contrib-clean": "^2.0.0",
-    "grunt-jasmine-node": "^0.3.1",
-    "grunt-shell": "^3.0.1",
-    "jasmine-core": "^3.10.1",
-    "jasmine-expect": "^5.0.0",
+    "jasmine-node": "^3.0.0",
     "js-yaml": "^4.1.0",
-    "load-grunt-config": "^4.0.1",
-    "load-grunt-tasks": "^5.1.0",
     "nyc": "^15.1.0",
     "temp": "^0.9.4",
     "time-grunt": "^2.0.0"

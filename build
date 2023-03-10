@@ -3,11 +3,6 @@ set -eu
 
 VERSION=${VERSION:-0.$(date +%Y%m%d%H%M)}
 ci=
-grunt_opts=
-
-if ! test -t 1; then
-  grunt_opts="--no-color"
-fi
 
 while test $# -gt 0; do
   case "$1" in
@@ -19,7 +14,7 @@ while test $# -gt 0; do
   shift
 done
 
-grunt --no-color test
+npm run test
 if [ "$ci" = "true" ]; then
   sonar-scanner
 fi
