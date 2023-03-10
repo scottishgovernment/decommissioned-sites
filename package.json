@@ -1,7 +1,7 @@
 {
   "name": "decommissioned-sites",
   "description": "mygov.scot web site",
-  "version": "0.0.0",
+  "version": "1.0.37",
   "repository": {
     "type": "git",
     "url": "ssh://git@stash.digital.gov.uk:7999/mgv/decommissioned-sites.git"
