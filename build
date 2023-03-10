@@ -20,10 +20,8 @@ while test $# -gt 0; do
 done
 
 grunt --no-color test
-if [ -z "$ci" ]; then
-  grunt $grunt_opts sonar
-else
-  grunt $grunt_opts sonar-ci
+if [ "$ci" = "true" ]; then
+  sonar-scanner
 fi
 
 rm -f debian/changelog

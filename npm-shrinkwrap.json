@@ -23,7 +23,6 @@
         "grunt-contrib-clean": "^2.0.0",
         "grunt-jasmine-node": "^0.3.1",
         "grunt-shell": "^3.0.1",
-        "grunt-sonar-runner": "^3.0.2",
         "jasmine-core": "^3.10.1",
         "jasmine-expect": "^5.0.0",
         "js-yaml": "^4.1.0",
@@ -2495,21 +2494,6 @@
       },
       "engines": {
         "node": ">=4"
-      }
-    },
-    "node_modules/grunt-sonar-runner": {
-      "version": "3.0.2",
-      "resolved": "https://registry.npmjs.org/grunt-sonar-runner/-/grunt-sonar-runner-3.0.2.tgz",
-      "integrity": "sha512-RpDhslrhfIcJgZKY14V5WGwwSHAwrGml7AdR3D49njfmnU2MQBMzC6h7O4+sVu7MH5JYiIo7b2LzqfrrgJyEsw==",
-      "dev": true,
-      "dependencies": {
-        "grunt-cli": "^1.3.2"
-      },
-      "engines": {
-        "node": ">= 0.10"
-      },
-      "peerDependencies": {
-        "grunt": ">=0.4.5"
       }
     },
     "node_modules/grunt/node_modules/argparse": {
@@ -6895,15 +6879,6 @@
             "has-flag": "^3.0.0"
           }
         }
-      }
-    },
-    "grunt-sonar-runner": {
-      "version": "3.0.2",
-      "resolved": "https://registry.npmjs.org/grunt-sonar-runner/-/grunt-sonar-runner-3.0.2.tgz",
-      "integrity": "sha512-RpDhslrhfIcJgZKY14V5WGwwSHAwrGml7AdR3D49njfmnU2MQBMzC6h7O4+sVu7MH5JYiIo7b2LzqfrrgJyEsw==",
-      "dev": true,
-      "requires": {
-        "grunt-cli": "^1.3.2"
       }
     },
     "handlebars": {
