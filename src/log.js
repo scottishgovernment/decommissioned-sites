@@ -7,7 +7,10 @@ class Log {
 
     constructor(url) {
         this.url = url || 'http://localhost:5984/publish';
-        this.db = nano(this.url);
+        const parsed = new URL(this.url);
+        const dbName = parsed.pathname.replace(/^\//, '');
+        parsed.pathname = '';
+        this.db = nano(parsed.toString()).db.use(dbName);
     }
 
     async record(user, start, end) {

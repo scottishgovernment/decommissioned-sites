@@ -1,6 +1,5 @@
-const rimraf = require('rimraf');
+const { rimraf } = require('rimraf');
 const path = require('path');
-const util = require('util');
 const Copy = require('./copy');
 const Decommissioner = require('./decommissioner');
 const Serf = require('./serf');
@@ -29,9 +28,8 @@ class Publisher {
     }
 
     async publish(user) {
-        const rm = util.promisify(rimraf);
         const start = new Date();
-        await rm(path.join(this.config.tempdir, 'nginx'));
+        await rimraf(path.join(this.config.tempdir, 'nginx'));
         await this.decommissioner.createRedirects();
         await this.copy.publish();
         await this.serf.publish();

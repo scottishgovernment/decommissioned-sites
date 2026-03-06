@@ -15,7 +15,7 @@
     "clean": "rm -r out debian/changelog debian/decommissioned-sites/",
     "publish": "bin/redirects",
     "publish-redirects": "node src/publisher.js",
-    "test": "nyc jasmine-node --junitreport --output out/reports test"
+    "test": "nyc jasmine --helper=test/helpers/reporter.js 'test/**/*_spec.js'"
   },
   "dependencies": {
     "config-weaver": "^0.0.16",
@@ -29,7 +29,8 @@
   "devDependencies": {
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
-    "jasmine-node": "^3.0.0",
+    "jasmine": "^6.1.0",
+    "jasmine-reporters": "^2.5.2",
     "js-yaml": "^4.1.0",
     "nyc": "^18.0.0",
     "temp": "^0.9.4"

@@ -30,14 +30,17 @@ describe('Serf client', function() {
     var connectionHandler;
 
     beforeEach(function(done) {
-        setupServer(done);
-        serf = createInstance();
         dataReceived = expectHandshakeHeader;
+        setupServer(() => {
+            serf = createInstance();
+            done();
+        });
     });
 
     afterEach(() => {
         serf.stop();
         server.close();
+        server = null;
     });
 
     it('should have reasonable defaults', function () {
@@ -47,7 +50,7 @@ describe('Serf client', function() {
         expect(serf.timeout).toBeGreaterThan(1);
     });
 
-    xit('should reconnect if the server drops the connection', function (done) {
+    it('should reconnect if the server drops the connection', function (done) {
         var first = true;
         connectionHandler = makeConnectionHandler((message) => {
             // drop the connection after the client sends the handshake
@@ -87,9 +90,6 @@ describe('Serf client', function() {
     }
 
     function setupServer(done) {
-        if (server) {
-            done();
-        }
         server = net.createServer({ pauseOnConnect: true }, (c) => {
             connection = c;
             connectionHandler(c);
@@ -97,9 +97,7 @@ describe('Serf client', function() {
         server.on('error', (err) => {
             throw err;
         });
-        server.listen(0, function() {
-            done();
-        });
+        server.listen(0, done);
     }
 
     function makeConnectionHandler(messageHandler) {
