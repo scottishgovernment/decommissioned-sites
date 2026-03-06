@@ -1,5 +1,5 @@
 const fs = require('fs');
-const got = require('got');
+const got = require('got').got;
 const handlebars = require('handlebars');
 const path = require('path');
 const util = require('util');

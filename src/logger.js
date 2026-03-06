@@ -1,6 +1,6 @@
 'use strict';
 
-const dateformat = require('dateformat');
+const dateformat = require('dateformat').default;
 
 /**
  * Provides a basic logger that logs the time with each message.
