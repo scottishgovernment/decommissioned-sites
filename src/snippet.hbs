@@ -1,0 +1,16 @@
+# Nginx virtual host configuration for {{name}}
+
+## redirects for {{host}} ##
+
+set $args '';
+
+{{#pages}}
+rewrite '{{{source}}}'
+        '{{{target}}}' {{rewriteFlag}};
+{{/pages}}
+
+# catch all redirect to the home page
+location / {
+  rewrite ^ {{{catchAllUri}}} break;
+  return 302;
+}
