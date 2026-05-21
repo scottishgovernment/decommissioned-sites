@@ -22,7 +22,7 @@ describe('decommissioner', function() {
         var error = undefined;
         decommissioner.createRedirects()
         .then(_ => {
-            var redirectFile = fs.readFileSync(tempDir + '/nginx/decommissioned/alpha.mygov.scot.conf');
+            var redirectFile = fs.readFileSync(tempDir + '/nginx/redirects/alpha.mygov.scot.conf');
         })
         .catch(err => {
           error = err;

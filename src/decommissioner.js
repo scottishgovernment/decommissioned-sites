@@ -7,19 +7,15 @@ const util = require('util');
 class Decommissioner {
 
     constructor(config) {
-        const pagesTemplateSrc = fs.readFileSync(__dirname + '/vhost.hbs', 'UTF-8');
-        const snippetTemplateSrc = fs.readFileSync(__dirname + '/snippet.hbs', 'UTF-8');
+        const redirectsTemplateSrc = fs.readFileSync(__dirname + '/redirects.hbs', 'UTF-8');
         this.config = config;
-        this.pagesTemplate = handlebars.compile(pagesTemplateSrc);
-        this.snippetTemplate = handlebars.compile(snippetTemplateSrc);
-        this.outputDir = path.join(this.config.tempdir, 'nginx', 'decommissioned');
-        this.snippetDir = path.join(this.config.tempdir, 'nginx', 'redirects');
+        this.redirectsTemplate = handlebars.compile(redirectsTemplateSrc);
+        this.outputDir = path.join(this.config.tempdir, 'nginx', 'redirects');
     }
 
     async createRedirects() {
         const mkdir = util.promisify(fs.mkdir);
         await mkdir(this.outputDir, { recursive: true });
-        await mkdir(this.snippetDir, { recursive: true });
         const sites = await this.fetchSites();
         return await this.fetchPagesForSites(sites);
     }
@@ -130,15 +126,11 @@ class Decommissioner {
             pages: pages
         };
 
-        var content = this.pagesTemplate(srcDoc);
-        var snippet = this.snippetTemplate(srcDoc);
-
+        var content = this.redirectsTemplate(srcDoc);
         const filename = site.host.split(' ')[0] + '.conf';
         const pathname = path.join(this.outputDir, filename);
-        const snippetPath = path.join(this.snippetDir, filename);
         const writeFile = util.promisify(fs.writeFile);
         await writeFile(pathname, content, 'UTF-8')
-        await writeFile(snippetPath, snippet, 'UTF-8');
     }
 
     static run() {
