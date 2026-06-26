@@ -1,9 +1,6 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --env-file-if-exists env
 process.title = 'redirects';
-const configWeaver = require('config-weaver');
-const config = configWeaver.config();
-configWeaver.showVars(config, 'redirects');
-
+const config = require('../src/config').default;
 const Publisher = require('../src/publisher');
 const publisher = new Publisher(config);
 const Log = require('../src/log');

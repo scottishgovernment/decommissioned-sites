@@ -134,9 +134,7 @@ class Decommissioner {
     }
 
     static run() {
-        const configWeaver = require('config-weaver');
-        var config = configWeaver.config();
-        configWeaver.showVars(config, 'redirects');
+        const config = require('./config').default;
         var decommissioner = new Decommissioner(config);
         decommissioner.createRedirects()
         .catch(err => {

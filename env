@@ -1,0 +1,4 @@
+URL=http://localhost:8089/
+SITE_URL=https://www.mygov.scot/
+WORK_DIR=out
+TARGET=

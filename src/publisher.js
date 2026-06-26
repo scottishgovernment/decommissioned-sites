@@ -38,9 +38,7 @@ class Publisher {
     }
 
     static async run() {
-        const configWeaver = require('config-weaver');
-        var config = configWeaver.config();
-        configWeaver.showVars(config, 'redirects');
+        const config = require('./config').default;
         var publisher = new Publisher(config);
         await publisher.start();
         await publisher.publish('admin@mygov.scot');

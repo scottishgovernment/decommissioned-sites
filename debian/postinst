@@ -3,45 +3,23 @@
 #
 # see: dh_installdeb(1)
 
-set -e
+set -eu
 
 configure() {
   # Set-up site user
-   adduser \
-      --quiet \
-      --system \
-      --home /opt/redirects \
-      --no-create-home \
-      --shell /bin/bash \
-      --group \
-      --gecos "Redirects" \
-      redirects
+  adduser \
+    --quiet \
+    --system \
+    --home /opt/redirects \
+    --no-create-home \
+    --shell /bin/bash \
+    --group \
+    --gecos "Redirects" \
+    redirects
 
-  if ! id -g site >/dev/null 2>&1 ; then
-    groupadd \
-      --force \
-      --non-unique \
-      --gid "$(id -g redirects)" \
-      site
-  fi
-
-  if ! id -u site >/dev/null 2>&1 ; then
-    useradd \
-      --non-unique \
-      --uid "$(id -u redirects)" \
-      --gid "$(id -g redirects)" \
-      --no-create-home \
-      --home-dir /opt/redirects \
-      --shell /bin/bash \
-      --comment "Site" \
-      site
-  fi
-
-   # File permissions
-   cd /opt/redirects
-   mkdir -p out
-   chown -R redirects:redirects out
-   /opt/redirects/push
+  mkdir -p /srv/redirects
+  chown -R redirects:redirects /srv/redirects
+  /opt/redirects/push
  }
 
 case "$1" in

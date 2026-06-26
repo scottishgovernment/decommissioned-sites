@@ -33,9 +33,7 @@ class Copy {
     }
 
     static run() {
-        const configWeaver = require('config-weaver');
-        var config = configWeaver.config();
-        configWeaver.showVars(config, 'redirects');
+        const config = require('./config').default;
         var publisher = new Publisher(config);
         publisher.publish()
         .catch(err => {

@@ -8,7 +8,6 @@
       "name": "decommissioned-sites",
       "version": "0.0.0",
       "dependencies": {
-        "config-weaver": "^0.0.16",
         "dateformat": "^5.0.3",
         "got": "^14.6.6",
         "handlebars": "^4.7.8",
@@ -519,6 +518,7 @@
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
       "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "dev": true,
       "license": "Python-2.0"
     },
     "node_modules/balanced-match": {
@@ -848,15 +848,6 @@
       "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==",
       "dev": true,
       "license": "MIT"
-    },
-    "node_modules/config-weaver": {
-      "version": "0.0.16",
-      "resolved": "https://registry.npmjs.org/config-weaver/-/config-weaver-0.0.16.tgz",
-      "integrity": "sha512-ATtoV3oofakFgEEbzHasPJDjRPaCtSr0pXZMzb758/QfZKVtei4C+sSrfVwrZPZBcYC6k8p/ZsMLSYzNSkd83Q==",
-      "license": "MIT",
-      "dependencies": {
-        "js-yaml": "^4.1.1"
-      }
     },
     "node_modules/content-disposition": {
       "version": "1.0.1",
@@ -1978,6 +1969,7 @@
       "version": "4.1.1",
       "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz",
       "integrity": "sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "argparse": "^2.0.1"

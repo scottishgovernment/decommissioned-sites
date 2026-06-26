@@ -1,4 +1,4 @@
-config.yaml  /opt/redirects
+env          /opt/redirects
 node_modules /opt/redirects
 package.json /opt/redirects
 bin          /opt/redirects
