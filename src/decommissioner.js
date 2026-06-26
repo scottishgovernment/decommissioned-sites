@@ -130,7 +130,7 @@ class Decommissioner {
         const filename = site.host.split(' ')[0] + '.conf';
         const pathname = path.join(this.outputDir, filename);
         const writeFile = util.promisify(fs.writeFile);
-        await writeFile(pathname, content, 'UTF-8')
+        await writeFile(pathname, content, 'UTF-8');
     }
 
     static run() {
