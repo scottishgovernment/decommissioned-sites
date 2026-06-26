@@ -10,7 +10,7 @@ class Decommissioner {
         const redirectsTemplateSrc = fs.readFileSync(__dirname + '/redirects.hbs', 'UTF-8');
         this.config = config;
         this.redirectsTemplate = handlebars.compile(redirectsTemplateSrc);
-        this.outputDir = path.join(this.config.tempdir, 'nginx', 'redirects');
+        this.outputDir = path.join(this.config.tempdir, 'nginx');
     }
 
     async createRedirects() {
